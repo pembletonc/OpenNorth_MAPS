@@ -1,9 +1,8 @@
 library(tidyverse)
 library(DataExplorer)
 library(janitor)
-
-synth_dat <- read_csv("maps-synthetic-data.csv")
-synth_dat <- synth_dat %>% rename(ID = X1)
+library(naniar)
+synth_dat <- read_csv("maps-synthetic-data.csv") %>% rename(ID = X1)
 
 #Participants (n = 14,665; complete cases n = 1869)
 
@@ -26,7 +25,7 @@ glimpse(synth_dat)
 # time alone weekday/end = "How much time on average do you spend each day doing things by yourself on a typical weekday?"
 # ICD_Depression_Diagnosis = Calculated from their Revised Computerised Interview Schedule (CIS-R) score. See CIS-R Descriptive Summary for more information.
 
-synth_dat %>% select(ID, sex, 
+synth_dat <- synth_dat %>% select(ID, sex, 
                      Secondary_Depression_Diagnosis_17.5 = secd_diag,
                      Primary_Depression_Diagnosis_17.5 = prim_diag,
                      ICD_Depression_Diagnosis_17.5 = has_dep_diag,
@@ -41,9 +40,23 @@ synth_dat %>% select(ID, sex,
                      Computer_No_Int_Room_14 = comp_noint_bed_16,
                      Bullying_16.5 = child_bull,
                      Time_Alone_Weekday_16.5 = alon_week,
-                     Time_Alone_Weekend_16.5 = alon_wend) %>% View()
+                     Time_Alone_Weekend_16.5 = alon_wend) 
+
+glimpse(synth_dat)
+
+synth_dat %>% naniar::vis_miss()
+
+
+synth_dat %>% visdat::vis_dat()
 
 
 
+synth_dat %>% naniar::gg_miss_upset()
+synth_dat %>% naniar::gg_miss_upset(nsets = n_var_miss(riskfactors))
 
+synth_dat %>% naniar::gg_miss_var(show_pct = TRUE, facet = sex)
+
+synth_dat %>% naniar::miss_var_span(ICD_Depression_Diagnosis_17.5, span_every = 3000)
+
+synth_dat %>% naniar::gg_miss_span(ICD_Depression_Diagnosis_17.5, span_every = 1000) + labs(title = "Number of missing ICD Depression Diagnosis")
 
