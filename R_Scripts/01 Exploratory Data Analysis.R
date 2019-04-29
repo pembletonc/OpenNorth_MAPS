@@ -2,12 +2,11 @@ library(tidyverse)
 library(DataExplorer)
 library(janitor)
 library(naniar)
-synth_dat <- read_csv("maps-synthetic-data.csv") %>% rename(ID = X1)
+dat <- read_csv("maps-synthetic-data.csv") %>% rename(ID = X1)
 
 #Participants (n = 14,665; complete cases n = 1869)
 
-glimpse(synth_dat)
-
+glimpse(dat)
 
 #4,562 completed CIS-R at age 18
 #3,009 with exposure information at 16
@@ -25,7 +24,10 @@ glimpse(synth_dat)
 # time alone weekday/end = "How much time on average do you spend each day doing things by yourself on a typical weekday?"
 # ICD_Depression_Diagnosis = Calculated from their Revised Computerised Interview Schedule (CIS-R) score. See CIS-R Descriptive Summary for more information.
 
-synth_dat <- synth_dat %>% select(ID, sex, 
+# variables identified in the imputation as "important":
+# important_vars <-c('has_dep_diag','prim_diag','secd_diag','dep_thoughts','dep_score','comp_week','comp_wend')
+
+dat <- dat %>% select(ID, sex, 
                      Secondary_Depression_Diagnosis_17.5 = secd_diag,
                      Primary_Depression_Diagnosis_17.5 = prim_diag,
                      ICD_Depression_Diagnosis_17.5 = has_dep_diag,
@@ -42,21 +44,26 @@ synth_dat <- synth_dat %>% select(ID, sex,
                      Time_Alone_Weekday_16.5 = alon_week,
                      Time_Alone_Weekend_16.5 = alon_wend) 
 
-glimpse(synth_dat)
+glimpse(dat)
 
-synth_dat %>% naniar::vis_miss()
+# This calculates the number of complete cases
+
+n_comp_cases <- function(df) {
+  dims <- df %>% filter(complete.cases(.)) %>% dim() 
+  dims[1] 
+}
+
+n_comp_cases(dat)
+
+dat %>% naniar::vis_miss()
+dat %>% visdat::vis_dat()
+dat %>% naniar::gg_miss_upset()
+dat %>% naniar::gg_miss_upset(nsets = n_var_miss(riskfactors))
+dat %>% naniar::gg_miss_var(show_pct = TRUE, facet = sex)
+dat %>% naniar::miss_var_span(ICD_Depression_Diagnosis_17.5, span_every = 3000)
+dat %>% naniar::gg_miss_span(ICD_Depression_Diagnosis_17.5, span_every = 1000) + 
+  labs(title = "Number of missing ICD Depression Diagnosis")
 
 
-synth_dat %>% visdat::vis_dat()
 
-
-
-synth_dat %>% naniar::gg_miss_upset()
-synth_dat %>% naniar::gg_miss_upset(nsets = n_var_miss(riskfactors))
-
-synth_dat %>% naniar::gg_miss_var(show_pct = TRUE, facet = sex)
-
-synth_dat %>% naniar::miss_var_span(ICD_Depression_Diagnosis_17.5, span_every = 3000)
-
-synth_dat %>% naniar::gg_miss_span(ICD_Depression_Diagnosis_17.5, span_every = 1000) + labs(title = "Number of missing ICD Depression Diagnosis")
 
