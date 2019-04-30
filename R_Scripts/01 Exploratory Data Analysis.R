@@ -4,9 +4,141 @@ library(janitor)
 library(naniar)
 dat <- read_csv("maps-synthetic-data.csv") %>% rename(ID = X1)
 
-#Participants (n = 14,665; complete cases n = 1869)
 
-glimpse(dat)
+vars_model1 <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
+          "comp_week", "comp_wend")
+
+vars_model2 <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
+                 "comp_week", "comp_wend", "sex","anx_band_15",
+                 "mat_anx_0m","mat_anx_1","mat_anx_18m", "mat_anx_8m",
+                 "mat_dep", "mat_edu", "mat_ses")
+
+vars_model3 <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
+                 "comp_week", "comp_wend", "sex","anx_band_15",
+                 "mat_anx_0m","mat_anx_1","mat_anx_18m", "mat_anx_8m",
+                 "mat_dep", "mat_edu", "mat_ses", "iq", "pat_pres", 
+                 "pat_pres_10", "pat_pres_8", "num_home", "phys_cruel", "emot_cruel",
+                 "child_bull","fam_tv_aft", "fam_tv_eve", "fam_tv_mor")
+  
+vars_model4a <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
+                 "comp_week", "comp_wend", "sex","anx_band_15",
+                 "mat_anx_0m","mat_anx_1","mat_anx_18m", "mat_anx_8m",
+                 "mat_dep", "mat_edu", "mat_ses", "iq", "pat_pres", 
+                 "pat_pres_10", "pat_pres_8", "num_home", "phys_cruel", "emot_cruel",
+                 "child_bull","fam_tv_aft", "fam_tv_eve", "fam_tv_mor",
+                 "alon_week", "alon_day")
+
+vars_model4b <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
+                  "comp_week", "comp_wend", "sex","anx_band_15",
+                  "mat_anx_0m","mat_anx_1","mat_anx_18m", "mat_anx_8m",
+                  "mat_dep", "mat_edu", "mat_ses", "iq", "pat_pres", 
+                  "pat_pres_10", "pat_pres_8", "num_home", "phys_cruel", "emot_cruel",
+                  "child_bull","fam_tv_aft", "fam_tv_eve", "fam_tv_mor",
+                  "tran_week","tran_wend")
+
+vars_model4c <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
+                  "comp_week", "comp_wend", "sex","anx_band_15",
+                  "mat_anx_0m","mat_anx_1","mat_anx_18m", "mat_anx_8m",
+                  "mat_dep", "mat_edu", "mat_ses", "iq", "pat_pres", 
+                  "pat_pres_10", "pat_pres_8", "num_home", "phys_cruel", "emot_cruel",
+                  "child_bull","fam_tv_aft", "fam_tv_eve", "fam_tv_mor",
+                  "out_sum_wend", "out_sum_week")
+
+vars_model4d <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
+                  "comp_week", "comp_wend", "sex","anx_band_15",
+                  "mat_anx_0m","mat_anx_1","mat_anx_18m", "mat_anx_8m",
+                  "mat_dep", "mat_edu", "mat_ses", "iq", "pat_pres", 
+                  "pat_pres_10", "pat_pres_8", "num_home", "phys_cruel", "emot_cruel",
+                  "child_bull","fam_tv_aft", "fam_tv_eve", "fam_tv_mor",
+                  "out_win_wend", "out_win_week")
+
+vars_model4e <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
+                  "comp_week", "comp_wend", "sex","anx_band_15",
+                  "mat_anx_0m","mat_anx_1","mat_anx_18m", "mat_anx_8m",
+                  "mat_dep", "mat_edu", "mat_ses", "iq", "pat_pres", 
+                  "pat_pres_10", "pat_pres_8", "num_home", "phys_cruel", "emot_cruel",
+                  "child_bull","fam_tv_aft", "fam_tv_eve", "fam_tv_mor",
+                  "play_week", "play_wend")
+
+vars_model4f <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
+                  "comp_week", "comp_wend", "sex","anx_band_15",
+                  "mat_anx_0m","mat_anx_1","mat_anx_18m", "mat_anx_8m",
+                  "mat_dep", "mat_edu", "mat_ses", "iq", "pat_pres", 
+                  "pat_pres_10", "pat_pres_8", "num_home", "phys_cruel", "emot_cruel",
+                  "child_bull","fam_tv_aft", "fam_tv_eve", "fam_tv_mor",
+                  "draw_week", "draw_wend")
+
+vars_model4g <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
+                  "comp_week", "comp_wend", "sex","anx_band_15",
+                  "mat_anx_0m","mat_anx_1","mat_anx_18m", "mat_anx_8m",
+                  "mat_dep", "mat_edu", "mat_ses", "iq", "pat_pres", 
+                  "pat_pres_10", "pat_pres_8", "num_home", "phys_cruel", "emot_cruel",
+                  "child_bull","fam_tv_aft", "fam_tv_eve", "fam_tv_mor",
+                  "exercise")
+
+vars_model4h <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
+                  "comp_week", "comp_wend", "sex","anx_band_15",
+                  "mat_anx_0m","mat_anx_1","mat_anx_18m", "mat_anx_8m",
+                  "mat_dep", "mat_edu", "mat_ses", "iq", "pat_pres", 
+                  "pat_pres_10", "pat_pres_8", "num_home", "phys_cruel", "emot_cruel",
+                  "child_bull","fam_tv_aft", "fam_tv_eve", "fam_tv_mor",
+                  "work_wend", "work_week")
+
+vars_model4i <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
+                  "comp_week", "comp_wend", "sex","anx_band_15",
+                  "mat_anx_0m","mat_anx_1","mat_anx_18m", "mat_anx_8m",
+                  "mat_dep", "mat_edu", "mat_ses", "iq", "pat_pres", 
+                  "pat_pres_10", "pat_pres_8", "num_home", "phys_cruel", "emot_cruel",
+                  "child_bull","fam_tv_aft", "fam_tv_eve", "fam_tv_mor",
+                  "read_wend", "read_week")
+
+vars_model4j <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
+                  "comp_week", "comp_wend", "sex","anx_band_15",
+                  "mat_anx_0m","mat_anx_1","mat_anx_18m", "mat_anx_8m",
+                  "mat_dep", "mat_edu", "mat_ses", "iq", "pat_pres", 
+                  "pat_pres_10", "pat_pres_8", "num_home", "phys_cruel", "emot_cruel",
+                  "child_bull","fam_tv_aft", "fam_tv_eve", "fam_tv_mor",
+                  "musi_wend", "musi_week")
+
+vars_model4k <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
+                  "comp_week", "comp_wend", "sex","anx_band_15",
+                  "mat_anx_0m","mat_anx_1","mat_anx_18m", "mat_anx_8m",
+                  "mat_dep", "mat_edu", "mat_ses", "iq", "pat_pres", 
+                  "pat_pres_10", "pat_pres_8", "num_home", "phys_cruel", "emot_cruel",
+                  "child_bull","fam_tv_aft", "fam_tv_eve", "fam_tv_mor",
+                  "talk_mob_week", "talk_mob_wend")
+
+
+vars_model4l <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
+                  "comp_week", "comp_wend", "sex","anx_band_15",
+                  "mat_anx_0m","mat_anx_1","mat_anx_18m", "mat_anx_8m",
+                  "mat_dep", "mat_edu", "mat_ses", "iq", "pat_pres", 
+                  "pat_pres_10", "pat_pres_8", "num_home", "phys_cruel", "emot_cruel",
+                  "child_bull","fam_tv_aft", "fam_tv_eve", "fam_tv_mor",
+                  "talk_phon_week", "talk_phon_wend")
+
+
+filter.NA.fun <- function(df, var){ 
+  
+  var <- enquo(var)
+  
+ count <-  df %>% 
+    select(one_of(!!var)) %>%
+    filter_all(all_vars(!is.na(.))) %>% 
+    summarise(count = n()) 
+    
+  } 
+
+all_model_vars <- list(vars_model1 = vars_model1, vars_model2 = vars_model2,
+                       vars_model3 = vars_model3,  vars_model4a = vars_model4a,
+                       vars_model4b = vars_model4b, vars_model4c = vars_model4c, vars_model4d = vars_model4d,
+                       vars_model4e = vars_model4e, vars_model4f = vars_model4f,
+                       vars_model4g = vars_model4g, vars_model4h = vars_model4h,
+                       vars_model4i = vars_model4i, vars_model4j = vars_model4j,
+                       vars_model4k = vars_model4k, vars_model4l = vars_model4l)
+
+map_df(all_model_vars, filter.NA.fun, df = dat) %>% add_column(model = names(all_model_vars))
+#Participants (n = 14,665; complete cases n = 1869)
 
 #4,562 completed CIS-R at age 18
 #3,009 with exposure information at 16
@@ -25,35 +157,7 @@ glimpse(dat)
 # ICD_Depression_Diagnosis = Calculated from their Revised Computerised Interview Schedule (CIS-R) score. See CIS-R Descriptive Summary for more information.
 
 # variables identified in the imputation as "important":
-# important_vars <-c('has_dep_diag','prim_diag','secd_diag','dep_thoughts','dep_score','comp_week','comp_wend')
 
-dat <- dat %>% select(ID, sex, 
-                     Secondary_Depression_Diagnosis_17.5 = secd_diag,
-                     Primary_Depression_Diagnosis_17.5 = prim_diag,
-                     ICD_Depression_Diagnosis_17.5 = has_dep_diag,
-                     Depression_Score_17.5 = dep_score,
-                     Depression_Band_15.5 = dep_band_15,
-                     Panic_Score_17.5 = panic_score,
-                     Depressed_Thoughts_17.5 = dep_thoughts,
-                     Computer_Weekday_Use_16.5 = comp_week,
-                     Computer_Weekend_Use_16.5 = comp_wend,
-                     Computer_No_Int_House_14 = comp_house,
-                     Computer_Int_Room_14 = comp_int_bed_16,
-                     Computer_No_Int_Room_14 = comp_noint_bed_16,
-                     Bullying_16.5 = child_bull,
-                     Time_Alone_Weekday_16.5 = alon_week,
-                     Time_Alone_Weekend_16.5 = alon_wend) 
-
-glimpse(dat)
-
-# This calculates the number of complete cases
-
-n_comp_cases <- function(df) {
-  dims <- df %>% filter(complete.cases(.)) %>% dim() 
-  dims[1] 
-}
-
-n_comp_cases(dat)
 
 dat %>% naniar::vis_miss()
 dat %>% visdat::vis_dat()
