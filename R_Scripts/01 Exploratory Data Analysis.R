@@ -26,7 +26,7 @@ vars_model4a <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
                  "mat_dep", "mat_edu", "mat_ses", "iq", "pat_pres", 
                  "pat_pres_10", "pat_pres_8", "num_home", "phys_cruel", "emot_cruel",
                  "child_bull","fam_tv_aft", "fam_tv_eve", "fam_tv_mor",
-                 "alon_week", "alon_day")
+                 "alon_week", "alon_wend")
 
 vars_model4b <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
                   "comp_week", "comp_wend", "sex","anx_band_15",
@@ -138,6 +138,7 @@ all_model_vars <- list(vars_model1 = vars_model1, vars_model2 = vars_model2,
                        vars_model4k = vars_model4k, vars_model4l = vars_model4l)
 
 map_df(all_model_vars, filter.NA.fun, df = dat) %>% add_column(model = names(all_model_vars))
+
 #Participants (n = 14,665; complete cases n = 1869)
 
 #4,562 completed CIS-R at age 18
@@ -159,7 +160,21 @@ map_df(all_model_vars, filter.NA.fun, df = dat) %>% add_column(model = names(all
 # variables identified in the imputation as "important":
 
 
-dat %>% naniar::vis_miss()
+dat %>% select(one_of(vars_model1)) %>% naniar::vis_miss()
+
+
+dat %>% select(one_of(vars_model1)) %>% naniar::gg_miss_upset()
+
+dat %>% select(one_of(c(vars_model1, "mat_ses"))) %>%
+  naniar::gg_miss_var(show_pct = TRUE, facet = mat_ses)
+
+dat %>% select(one_of(c(vars_model1, "pat_ses"))) %>%
+  naniar::gg_miss_var(show_pct = TRUE, facet = pat_ses)
+
+dat$mat_ses
+dat %>% group_by(sex) %>% summarise(count = n())
+gg_miss_var()
+
 dat %>% visdat::vis_dat()
 dat %>% naniar::gg_miss_upset()
 dat %>% naniar::gg_miss_upset(nsets = n_var_miss(riskfactors))
@@ -168,6 +183,8 @@ dat %>% naniar::miss_var_span(ICD_Depression_Diagnosis_17.5, span_every = 3000)
 dat %>% naniar::gg_miss_span(ICD_Depression_Diagnosis_17.5, span_every = 1000) + 
   labs(title = "Number of missing ICD Depression Diagnosis")
 
+dat %>% naniar::gg_miss_var(show_pct = TRUE, facet = "comp_games")
 
 
+dat$comp_games
 
