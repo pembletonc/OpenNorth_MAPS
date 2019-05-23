@@ -4,9 +4,20 @@ library(janitor)
 library(naniar)
 dat <- read_csv("maps-synthetic-data.csv") %>% rename(ID = X1)
 
+View(dat)
+#categorization of data
+
+#Due to small numbers in some of the categories, 
+#anxiety and depression at 7, 10 and 13 were dichotomised into
+#low (categories 1 and 2) and medium/high (categories 3 to 6); 
+#anxiety and depression at 15 were regrouped into low (categories 1 and 2), medium (category 3) and high (categories 4–6).
+
+
 
 vars_model1 <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
           "comp_week", "comp_wend")
+
+
 
 vars_model2 <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
                  "comp_week", "comp_wend", "sex","anx_band_15",
