@@ -14,6 +14,7 @@ View(dat)
 
 
 
+
 vars_model1 <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
           "comp_week", "comp_wend")
 
