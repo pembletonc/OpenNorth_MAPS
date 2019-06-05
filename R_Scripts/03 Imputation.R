@@ -10,7 +10,7 @@ vars_model1 <- c("dep_score", "text_wend", "text_week", "tv_wend", "tv_week",
                  "comp_week", "comp_wend")
 
 dat_1 <- select_at(dat, .vars = c("ID", vars_model1))
-
+dat_1 <- 
 #refactor variables into numeric categories
 dat_1 <- dat_1 %>% mutate_at(vars(c(dep_score, text_wend, text_week, tv_wend, tv_week, comp_week, comp_wend)),
                     list(cat = ~case_when(. %in% c("Not at all") ~ 0,
@@ -51,7 +51,8 @@ imp3 <- mice.mids(imp2, maxit = 10)
 
 plot(imp3, c("dep_score", "text_wend_cat","text_week_cat", "tv_wend_cat", "tv_week_cat"))
 
-lattice::densityplot(imp2)
+densityplot(imp2, ~text_week_cat)
 
+mice::complete(imp2, 1)[1:15,]
 
-
+mice.mid
